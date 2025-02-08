@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container welcome-container">
+    <div class="header">
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/image1.png') }}" alt="Logo" class="bouncing-logo">
+        </div>
+        <h1 class="welcome-title">Welcome to Music Mood</h1>
+        <p class="welcome-subtitle">Let's find your perfect soundtrack! ✨</p>
+    </div>
+    
+    <div class="cta-buttons">
+        <a href="{{ url_for('auth.login') }}" class="btn primary-btn">Get Started</a>
+        <a href="{{ url_for('auth.register') }}" class="btn secondary-btn">Sign Up</a>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <i class="fas fa-camera"></i>
+            <h3>Snap</h3>
+            <p>Take a picture</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-heart"></i>
+            <h3>Feel</h3>
+            <p>We detect your mood</p>
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-music"></i>
+            <h3>Listen</h3>
+            <p>Get perfect songs</p>
+        </div>
+    </div>
+</div>
+
+<style>
+.welcome-container {
+    animation: fadeInUp 1s ease-out;
+}
+
+.bouncing-logo {
+    width: 120px;
+    height: 120px;
+    animation: bounce 2s infinite;
+}
+
+.welcome-title {
+    font-size: 3.5em;
+    margin: 20px 0;
+    animation: shimmer 2s infinite;
+}
+
+.welcome-subtitle {
+    font-size: 1.5em;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+.feature-card {
+    padding: 20px;
+    margin: 10px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    transition: transform 0.3s ease;
+    animation: floatIn 0.8s ease-out;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+{% endblock %}

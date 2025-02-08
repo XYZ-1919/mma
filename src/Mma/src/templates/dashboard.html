@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1 class="gradient-text">AI Music Assistant ✨</h1>
+        <p class="detected-emotion">Current Emotion: <span class="highlight">{{ emotion }}</span></p>
+    </div>
+
+
+    <div class="ai-insights">
+        <div class="insight-cards">
+            <div class="insight-card">
+                <div class="insight-header">
+                    <i class="fas fa-heart"></i>
+                    <h3>Emotion Detected</h3>
+                </div>
+                <div class="confidence-meter">
+                    <div class="confidence-bar" style="width: {{ '%.2f'|format(metrics.emotion_confidence*100) }}%"></div>
+                </div>
+                <p>Confidence: {{ '%.2f'|format(metrics.emotion_confidence*100) }}%</p>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-header">
+                    <i class="fas fa-magic"></i>
+                    <h3>Song Match Score</h3>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric">
+                        <span class="metric-value">{{ '%.2f'|format(metrics.similarity_score) }}%</span>
+                        <span class="metric-label">Match Rating</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Meta Features Section -->
+    <div class="meta-features">
+        <h2>Personalized Context</h2>
+        <div class="meta-grid">
+            <div class="meta-card">
+                <i class="fas fa-cloud text-gray-500"></i>
+                <p class="meta-label">Weather</p>
+                <p class="meta-value">{{ meta_features.get('weather_condition', 'Unknown') }}</p>
+            </div>
+            <div class="meta-card">
+                <i class="fas fa-temperature-high text-red-500"></i>
+                <p class="meta-label">Temperature</p>
+                <p class="meta-value">{{ meta_features.get('temperature', 'N/A') }}</p>
+            </div>
+            <div class="meta-card">
+                <i class="fas fa-clock text-indigo-500"></i>
+                <p class="meta-label">Time of Day</p>
+                <p class="meta-value">{{ meta_features.time_of_day }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Song Recommendations -->
+    <div class="song-container">
+        <h2>AI-Powered Song Picks</h2>
+        {% for song in songs %}
+        <div class="song-card">
+            <div class="song-header" onclick="toggleDetails('{{ loop.index }}')">
+                <div class="song-title">
+                    <i class="fas fa-music text-purple-500"></i>
+                    <h3>{{ song.track_name }}</h3>
+                    <p class="artist-name">{{ song.artist_name }}</p>
+                </div>
+                <i class="fas fa-chevron-down arrow"></i>
+            </div>
+
+            <div class="song-details" id="detail-{{ loop.index }}">
+                <!-- Music Analysis with Sliding Bars -->
+                <div class="music-analysis">
+                    <h4>Track Insights</h4>
+                    <div class="feature-bars">
+                        {% for feature, value in {'Energy': song.energy, 'Valence': song.valence, 'Danceability': song.danceability}.items() %}
+                        <div class="feature-bar">
+                            <label>{{ feature }}</label>
+                            <div class="progress-container">
+                                <div class="progress-bar" data-value="{{ value * 100 }}"></div>
+                                <span class="progress-text">{{ "%.0f"|format(value * 100) }}%</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <a href="{{ song.spotify_link }}" class="spotify-button" target="_blank">
+                        <i class="fab fa-spotify"></i> Listen on Spotify
+                    </a>
+                    <select name="ratings[]" class="rating-select" id="rating-{{ song.track_id }}">
+                        <option value="">Rate this song 🤖</option>
+                        <option value="1">Loved it 😍</option>
+                        <option value="2">Okay, but not for my mood 🙂‍↔️</option>
+                        <option value="3">Not a fan 😕</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Refresh & Re-Analyze Buttons -->
+    <div class="refresh-buttons">
+        <form method="POST" action="{{ url_for('recommendation.upload_image') }}" class="inline-form">
+            <button type="submit" class="action-button">Analyze Another Emotion</button>
+        </form>
+        <form method="GET" action="{{ url_for('recommendation.refresh_recommendations') }}" class="inline-form">
+            <input type="hidden" name="emotion" value="{{ emotion }}">
+            <button type="submit" class="action-button">More AI-Powered Songs</button>
+        </form>
+    </div>
+
+    <!-- Real-time Updates -->
+    <div class="realtime-stats">
+            <div class="stat-item">
+                <span class="stat-label">Features Processed</span>
+                <span class="stat-value">{{ metrics.total_features_count }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<!-- JavaScript for Animations -->
+<script>
+function toggleDetails(id) {
+    let details = document.getElementById('detail-' + id);
+    details.style.display = details.style.display === 'block' ? 'none' : 'block';
+}
+
+// Animate Progress Bars
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".progress-bar").forEach(bar => {
+        let value = bar.getAttribute("data-value");
+        bar.style.width = value + "%";
+    });
+});
+</script>
+
+{% endblock %}

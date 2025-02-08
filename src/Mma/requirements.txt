@@ -1,0 +1,28 @@
+# Core dependencies
+Flask==3.0.3
+Werkzeug==3.0.4
+Pillow==10.2.0
+numpy==1.26.4
+opencv-python-headless==4.10.0.82
+tensorflow==2.18.0
+python-dotenv==1.0.1
+
+# Database and authentication
+supabase==2.13.0
+bcrypt==4.2.0
+SQLAlchemy==2.0.35
+timezonefinder==6.5.8
+geopy==2.4.1
+# Web related
+requests==2.32.3
+Flask-Login==0.5.0
+Flask-SQLAlchemy==2.5.1
+Flask-Migrate==3.1.0
+Flask-WTF==1.2.1
+psycopg2-binary==2.9.9  # Changed from psycopg2 to psycopg2-binary
+# ML and data processing
+scikit-learn==1.5.1
+pandas==2.2.3
+
+# Deployment
+gunicorn==22.0.0
